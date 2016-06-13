@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankil.app.mybatis.persistence.AccountMapper">
+
+	<select id="getAccountList" parameterType="AccountVo" resultType="AccountVo">
+		SELECT * FROM hankil.user_account WHERE 1=1
+		<if test="user_id != null and user_id != ''">
+			AND user_account.user_rank like '%${user_id}%'
+		</if>
+		<if test="user_name != null and user_name != ''">
+			AND user_account.user_rank like '%${user_name}%'
+		</if>
+		<if test="user_rank != null and user_rank != ''">
+			AND user_account.user_rank = '${user_rank}'
+		</if>
+		<if test="connect_rank != null and connect_rank != 'master'">
+			AND user_account.user_rank not in ('master')
+		</if>
+		group by user_account.user_seq asc limit ${startIdx},${endIdx};
+	</select>
+
+	<select id="getAccountInfoByID" parameterType="AccountVo" resultType="AccountVo">
+		SELECT * FROM hankil.user_account WHERE user_account.user_id = '${user_id}';
+	</select>
+	
+	<select id="getAccountInfoBySeq" parameterType="String" resultType="AccountVo">
+		SELECT * FROM hankil.user_account WHERE user_account.user_seq = #{user_seq};
+	</select>
+	
+	<select id="getAccountListByRank" parameterType="hashMap" resultType="AccountVo">
+		SELECT * FROM hankil.user_account WHERE 1=1
+		<if test="user_rank != null and user_rank != 'master'">
+			AND user_account.user_rank in ('admin', 'client')
+		</if>
+		group by user_account.user_seq asc;
+	</select>
+	
+	<insert id="addAccountInfo" parameterType="AccountVo">
+		INSERT INTO
+			`hankil`.`user_account` (`user_id`,
+									`user_passwd`,
+									`user_name`,
+									`user_rank`,
+									`user_Email`,
+									`user_phone`,
+									`user_address`,
+									`user_department`,
+									`use_yn`)
+			VALUES ('${user_id}',
+					'${user_passwd}',
+					'${user_name}',
+					'${user_rank}',
+					'${user_Email}',
+					'${user_phone}',
+					'${user_address}',
+					'${user_department}',
+					'${use_yn}');
+	</insert>
+	
+	<update id="modifyAccountInfo" parameterType="AccountVo">
+		UPDATE `hankil`.`user_account` SET `user_id`='${user_id}',
+											`user_passwd`='${user_passwd}',
+											`user_name`='${user_name}',
+											`user_rank`='${user_rank}',
+											`user_Email`='${user_Email}',
+											`user_phone`='${user_phone}',
+											`user_address`='${user_address}',
+											`user_department`='${user_department}',
+											`use_yn`='${use_yn}'
+									WHERE `user_seq`='${user_seq}';
+	</update>
+	
+	<select id="getAccountTotCnt" parameterType="AccountVo" resultType="int">
+		SELECT COUNT(*) FROM hankil.user_account WHERE 1=1
+		<if test="user_id != null and user_id != ''">
+			AND user_account.user_rank like '%${user_id}%'
+		</if>
+		<if test="user_name != null and user_name != ''">
+			AND user_account.user_rank like '%${user_name}%'
+		</if>
+		<if test="user_rank != null and user_rank != ''">
+			AND user_account.user_rank = '${user_rank}'
+		</if>
+		<if test="connect_rank != null and connect_rank != 'master'">
+			AND user_account.user_rank not in ('master')
+		</if>
+		;
+	</select>
+	
+	<select id="getAccountRankList" parameterType="AccountVo" resultType="AccountVo">
+		SELECT user_account.user_rank FROM hankil.user_account WHERE 1=1
+		<if test="connect_rank != null and connect_rank != 'master'">
+			AND user_account.user_rank not in ('master')
+		</if>
+		group by user_account.user_rank asc;
+	</select>
+</mapper>

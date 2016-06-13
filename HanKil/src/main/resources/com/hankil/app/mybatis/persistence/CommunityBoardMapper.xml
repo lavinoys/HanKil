@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankil.app.mybatis.persistence.CommunityBoardMapper">
+
+	<select id="getCommunityBoardList" parameterType="CommunityBoardVo" resultType="CommunityBoardVo">
+		SELECT 
+			community_board.community_seq, 
+			community_board.title, 
+			community_board.content, 
+			community_board.count, 
+			community_board.user_name, 
+			community_board.type, 
+			community_board.rank, 
+			DATE_FORMAT(community_board.write_date,'%Y-%m-%d') as write_date,
+			DATE_FORMAT(community_board.update_date,'%Y-%m-%d') as update_date,
+			community_board.use_yn, 
+			community_board.secret_yn, 
+			community_board.reply_yn, 
+			community_board.passwd, 
+			community_board.ref_seq, 
+			community_board.reply_depth, 
+			community_board.reply_num, 
+			community_board.file_seq
+		FROM hankil.community_board
+				WHERE 1=1 
+				AND community_board.type = '${type}'
+				AND community_board.use_yn = 'y'
+				<if test="title != null and title != ''">
+				AND community_board.title like '%${title}%'
+				</if>
+				<if test="name != null and name != ''">
+				AND community_board.user_name like '%${user_name}%'
+				</if>
+		ORDER BY community_board.ref_seq DESC , community_board.reply_num ASC limit ${startIdx},${endIdx};
+	</select>
+	
+	<insert id="addCommunityBoardInfo" parameterType="CommunityBoardVo">
+		INSERT INTO 
+		`hankil`.`community_board` (`title`,
+								`content`,
+								`count`,
+								`user_name`,
+								`type`,
+								`rank`,
+								`write_date`,
+								`update_date`,
+								`use_yn`,
+								`secret_yn`,
+								`reply_yn`,
+								`passwd`,
+								`ref_seq`,
+								`reply_depth`,
+								`reply_num`,
+								`file_seq`)
+				VALUES ('${title}',
+						'${content}',
+						'${count}',
+						'${user_name}',
+						'${type}',
+						'${rank}',
+						now(),
+						now(),
+						'${use_yn}',
+						'${secret_yn}',
+						'${reply_yn}',
+						'${passwd}',
+						'${ref_seq}',
+						'${reply_depth}',
+						'${reply_num}',
+						'${file_seq}');
+	</insert>
+	
+	<select id="getCommunityBoardInfo" parameterType="CommunityBoardVo" resultType="CommunityBoardVo">
+		SELECT 
+				community_board.community_seq, 
+				community_board.title, 
+				community_board.content, 
+				community_board.count, 
+				community_board.user_name, 
+				community_board.type, 
+				community_board.rank, 
+				DATE_FORMAT(community_board.write_date,'%Y-%m-%d') as write_date,
+				DATE_FORMAT(community_board.update_date,'%Y-%m-%d') as update_date,
+				community_board.use_yn, 
+				community_board.secret_yn, 
+				community_board.reply_yn, 
+				community_board.passwd, 
+				community_board.ref_seq, 
+				community_board.reply_depth, 
+				community_board.reply_num, 
+				community_board.file_seq
+		 FROM hankil.community_board
+				WHERE 1=1
+				AND community_board.community_seq = '${community_seq}';
+	</select>
+	
+	<update id="modifyCommunityBoardInfo" parameterType="CommunityBoardVo">
+		UPDATE `hankil`.`community_board`
+				SET `title`='${title}',
+					`content`='${content}',
+					`count`='${count}',
+					`user_name`='${user_name}',
+					`type`='${type}',
+					`rank`='${rank}',
+					`update_date`=now(),
+					`use_yn`='${use_yn}',
+					`secret_yn`='${secret_yn}',
+					`reply_yn`='${reply_yn}',
+					`passwd`='${passwd}',
+					`ref_seq`='${ref_seq}',
+					`reply_depth`='${reply_depth}',
+					`reply_num`='${reply_num}',
+					`file_seq`='${file_seq}'
+					
+				WHERE 1=1
+				AND `community_seq`=${community_seq};
+	</update>
+	
+	<update id="modifyCommunityBoardCount" parameterType="CommunityBoardVo">
+		UPDATE `hankil`.`community_board`
+				SET `count`='${count}'
+				WHERE 1=1
+				AND `community_seq`=${community_seq};
+	</update>
+	
+	<select id="getCommunityBoarVotCnt" parameterType="CommunityBoardVo" resultType="int">
+		SELECT COUNT(*) FROM hankil.community_board
+				WHERE 1=1 
+				AND community_board.type = '${type}'
+				AND community_board.use_yn = 'y'
+				<if test="title != null and title != ''">
+				AND community_board.title like '%${title}%'
+				</if>
+				<if test="name != null and name != ''">
+				AND community_board.user_name like '%${user_name}%'
+				</if>
+				;
+	</select>
+	
+	<select id="getMaxSeq" resultType="int">
+		SELECT max(community_seq) FROM hankil.community_board;
+	</select>
+	
+	<select id="getReplyMaxNum" resultType="int" parameterType="CommunityBoardVo">
+		SELECT max(reply_num) FROM hankil.community_board where community_board.ref_seq = '${ref_seq}';
+	</select>
+	
+	<select id="getCommunityShortcutList" resultType="CommunityBoardVo" parameterType="int">
+		SELECT 
+		    community_board.community_seq,
+		    community_board.title,
+		    DATE_FORMAT(community_board.update_date, '%Y-%m-%d') AS update_date
+		FROM
+		    hankil.community_board
+		WHERE
+		    community_board.type = #{type}
+		    AND community_board.use_yn = 'y'
+		ORDER BY community_board.community_seq DESC
+		LIMIT 0 , 5;
+	</select>
+</mapper>

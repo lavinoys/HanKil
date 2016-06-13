@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankil.app.mybatis.persistence.ServiceBoardMapper">
+					
+	<select id="getServiceBoardList" parameterType="ServiceBoardVo" resultType="ServiceBoardVo">
+		SELECT 
+			service_board.service_seq, 
+			service_board.title, 
+			service_board.content, 
+			service_board.count, 
+			service_board.user_name, 
+			service_board.type, 
+			service_board.rank, 
+			DATE_FORMAT(service_board.write_date,'%Y-%m-%d') as write_date,
+			DATE_FORMAT(service_board.update_date,'%Y-%m-%d') as update_date, 
+			service_board.use_yn, 
+			service_board.secret_yn, 
+			service_board.reply_yn, 
+			service_board.passwd, 
+			service_board.ref_seq, 
+			service_board.reply_depth, 
+			service_board.reply_num, 
+			service_board.file_seq, 
+			service_board.category_seq, 
+			service_board.product_seq
+		FROM hankil.service_board
+				WHERE 1=1 
+				AND service_board.type = '${type}'
+				AND service_board.use_yn = 'y'
+				<if test="category_seq != null and category_seq > 0">
+				AND service_board.category_seq = '${category_seq}'
+				</if>
+				<if test="product_seq != null and product_seq > 0">
+				AND service_board.product_seq = '${product_seq}'
+				</if>
+				<if test="title != null and title != ''">
+				AND service_board.title like '%${title}%'
+				</if>
+				<if test="name != null and name != ''">
+				AND service_board.user_name like '%${user_name}%'
+				</if>
+				ORDER BY service_board.ref_seq DESC , service_board.reply_num ASC limit ${startIdx},${endIdx};
+	</select>
+	
+	<insert id="addServiceBoardInfo" parameterType="ServiceBoardVo">
+		INSERT INTO 
+		`hankil`.`service_board` (`title`,
+								`content`,
+								`count`,
+								`user_name`,
+								`type`,
+								`rank`,
+								`write_date`,
+								`update_date`,
+								`use_yn`,
+								`secret_yn`,
+								`reply_yn`,
+								`passwd`,
+								`ref_seq`,
+								`reply_depth`,
+								`reply_num`,
+								`file_seq`,
+								`category_seq`,
+								`product_seq`)
+				VALUES ('${title}',
+						'${content}',
+						'${count}',
+						'${user_name}',
+						'${type}',
+						'${rank}',
+						now(),
+						now(),
+						'${use_yn}',
+						'${secret_yn}',
+						'${reply_yn}',
+						'${passwd}',
+						'${ref_seq}',
+						'${reply_depth}',
+						'${reply_num}',
+						'${file_seq}',
+						'${category_seq}',
+						'${product_seq}');
+	</insert>
+	
+	<select id="getServiceBoardInfo" parameterType="ServiceBoardVo" resultType="ServiceBoardVo">
+		SELECT * FROM hankil.service_board
+				WHERE 1=1
+				AND service_board.service_seq = '${service_seq}';
+	</select>
+	
+	<update id="modifyServiceBoardInfo" parameterType="ServiceBoardVo">
+		UPDATE `hankil`.`service_board`
+				SET `title`='${title}',
+					`content`='${content}',
+					`count`='${count}',
+					`user_name`='${user_name}',
+					`type`='${type}',
+					`rank`='${rank}',
+					`update_date`=now(),
+					`use_yn`='${use_yn}',
+					`secret_yn`='${secret_yn}',
+					`reply_yn`='${reply_yn}',
+					`passwd`='${passwd}',
+					`ref_seq`='${ref_seq}',
+					`reply_depth`='${reply_depth}',
+					`reply_num`='${reply_num}',
+					`file_seq`='${file_seq}',
+					`category_seq`='${category_seq}',
+					`product_seq`='${product_seq}'
+					
+				WHERE 1=1
+				AND `service_seq`=${service_seq};
+	</update>
+	
+	<select id="getMaxSeq" resultType="int">
+		SELECT max(service_seq) FROM hankil.service_board;
+	</select>
+	
+	<select id="getServiceBoarVotCnt" parameterType="ServiceBoardVo" resultType="int">
+		SELECT COUNT(*) FROM hankil.service_board
+				WHERE 1=1 
+				AND service_board.type = '${type}'
+				AND service_board.use_yn = 'y'
+				<if test="category_seq != null and category_seq > 0">
+				AND service_board.category_seq = '${category_seq}'
+				</if>
+				<if test="product_seq != null and product_seq > 0">
+				AND service_board.product_seq = '${product_seq}'
+				</if>
+				<if test="title != null and title != ''">
+				AND service_board.title like '%${title}%'
+				</if>
+				<if test="name != null and name != ''">
+				AND service_board.user_name like '%${user_name}%'
+				</if>
+				;
+	</select>
+	
+	<select id="getReplyMaxNum" resultType="int" parameterType="ServiceBoardVo">
+		SELECT max(reply_num) FROM hankil.service_board where service_board.ref_seq = '${ref_seq}';
+	</select>
+</mapper>

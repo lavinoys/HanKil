@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+/* Common */
+body,div,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,a,button,select{margin:0;padding:0}
+body,input,textarea,select,button,table{font-family:'돋움',dotum,AppleGothic,sans-serif;font-size:1em;color:#4f565b}
+body{font-size:.75em;}
+img,fieldset,iframe{border:0}
+img{vertical-align:top}
+li{list-style:none}
+em,address{font-style:normal}
+input,select,button{vertical-align:middle;background:url(none);-webkit-border-radius:0; border-radius:0;}
+
+/* Common Add */
+caption,legend,.blind{visibility:hidden;overflow:hidden;position:absolute;top:0;left:-999em;width:0;height:0;font-size:0;line-height:0;text-align:left}
+caption{position:static}
+input[type=text]{height:25px;padding:0 7px;border-top:1px solid #c1c6cd;border-right:1px solid #e0e4ea;border-bottom:1px solid #e0e4ea;border-left:1px solid #c1c6cd;color:#464d61;line-height:2.2em}
+input[type=text].readonly{;border-top:1px solid #bfc6cc;border-left:1px solid #bfc6cc;border-right:1px solid #d8dee3;border-bottom:1px solid #d8dee3;background:#f1f3f4}
+input[type=text]:focus,select:focus{border:1px solid #00a2e2;background:#edf6fb;color:#464d61}
+input[type=radio]{*width:13px;*height:13px}
+select{height:27px;*margin-top:5px;padding:4px 4px 5px 4px;border-top:1px solid #c1c6cd;border-right:1px solid #e0e4ea;border-bottom:1px solid #e0e4ea;border-left:1px solid #c1c6cd;line-height:1.5em;color:#464d61}
+textarea{width:98%;padding:5px;border:1px solid #cfcfcf;line-height:1.5em}
+table{/* border-collapse:collapse; */border-spacing:0;line-height:1.5em}
+hr{display:none}
+a{text-decoration: none;color:#444;}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display: block;}
+
+a {color: #474747; text-decoration:none;}
+a:hover {text-decoration: none;}
+a:focus, input:focus, textarea:focus, button:focus {outline: 1px dotted #4b4b4b;}
+.hide{position: absolute;left: -9999em;text-indent: -9999em;}

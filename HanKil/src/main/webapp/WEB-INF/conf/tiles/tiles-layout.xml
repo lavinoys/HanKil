@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+	<definition name="admin_layouts_tiles" template="/WEB-INF/views/admin/layouts_tiles.jsp">
+		<put-attribute name="top" value="/WEB-INF/views/admin/admin_top.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/views/admin/admin_menu.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="bottom" value="/WEB-INF/views/admin/admin_bottom.jsp" />
+	</definition>
+	
+	<definition name="/admin/admin_login.do" template="/WEB-INF/views/admin/admin_login.jsp"/>
+	<definition name="/admin/*.do" extends="admin_layouts_tiles">
+		<put-attribute name="content" value="/WEB-INF/views/admin/{1}.jsp"/>
+	</definition>
+	<definition name="home" template="/WEB-INF/views/home.jsp" />
+	
+	<!-- 
+	<definition name="web_layouts_tiles" template="/WEB-INF/views/web/layouts_tiles.jsp">
+		<put-attribute name="top" value="/WEB-INF/views/web/layouts_top.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/views/web/layouts_menu.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="bottom" value="/WEB-INF/views/web/layouts_bottom.jsp" />
+	</definition>
+	<definition name="/web/*.do" extends="admin_layouts_tiles">
+		<put-attribute name="content" value="/WEB-INF/views/web/{1}.jsp"/>
+	</definition>
+	 -->
+	<definition name="/web/*.do" template="/WEB-INF/views/web/{1}.jsp"/>
+	<definition name="/web/*/*/*.do" template="/WEB-INF/views/web/{1}/{2}/{3}.jsp"/>  
+</tiles-definitions>

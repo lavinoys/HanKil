@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankil.app.mybatis.persistence.FileMapper">
+					
+
+	<select id="getFileList" parameterType="FileVo" resultType="FileVo">
+		SELECT * FROM hankil.file_info;
+	</select>
+	
+	<select id="getFileInfo" parameterType="FileVo" resultType="FileVo">
+		SELECT * FROM hankil.file_info WHERE file_info.file_seq = ${file_seq};
+	</select>
+	
+	
+	<insert id="addFileInfo" parameterType="FileVo">
+		INSERT INTO `hankil`.`file_info` (`file_name`, `file_url`, `file_type`, `file_info`)
+				VALUES ('${file_name}', '${file_url}', '${file_type}', '${file_info}');
+	</insert>
+	
+	<update id="modifyFileInfo" parameterType="FileVo">
+		UPDATE `hankil`.`file_info` SET `file_name`='${file_name}',
+										`file_url`='${file_url}',
+										`file_type`='${file_type}',
+										`file_info`='${file_info}'
+								WHERE `file_seq`='${file_seq}';
+	</update>
+	
+	<select id="getMaxSeq" resultType="int">
+		SELECT max(file_seq) FROM hankil.file_info;
+	</select>
+</mapper>

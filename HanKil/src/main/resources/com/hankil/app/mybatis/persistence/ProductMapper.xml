@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankil.app.mybatis.persistence.ProductMapper">
+
+	<select id="getProductCategoryList" parameterType="ProductCategoryVo" resultType="ProductCategoryVo">
+		SELECT * FROM hankil.product_category;
+	</select>
+	
+	<select id="getProductCategoryInfo" parameterType="ProductCategoryVo" resultType="ProductCategoryVo">
+		SELECT * FROM hankil.product_category WHERE `category_seq`='${category_seq}';
+	</select>
+	
+	<insert id="addProductCategoryInfo" parameterType="ProductCategoryVo">
+		INSERT INTO `hankil`.`product_category` (`category_name`,
+												`category_info`,
+												`use_yn`)
+										VALUES ('${category_name}',
+												'${category_info}',
+												'${use_yn}');
+	</insert>
+	
+	<update id="modifyProductCategoryInfo" parameterType="ProductCategoryVo">
+		UPDATE `hankil`.`product_category` SET `category_name`='${category_name}',
+												`category_info`='${category_info}',
+												`use_yn`='${use_yn}'
+										WHERE `category_seq`='${category_seq}';
+		
+	</update>
+	
+	<select id="getProductList" parameterType="ProductVo" resultType="ProductVo">
+		SELECT * FROM hankil.product_info WHERE 1=1
+		<if test="category_seq != null and category_seq !=''">
+			AND category_seq = '${category_seq}'
+		</if>
+		;
+	</select>
+	
+	<select id="getProductInfo" parameterType="ProductVo" resultType="ProductVo">
+		SELECT * FROM hankil.product_info WHERE `product_seq`='${product_seq}';
+	</select>
+	
+	<insert id="addProductInfo" parameterType="ProductVo">
+		INSERT INTO `hankil`.`product_info` (`category_seq`,
+											`category_name`,
+											`product_name`,
+											`product_info`,
+											`use_yn`)
+									VALUES ('${category_seq}',
+											'${category_name}',
+											'${product_name}',
+											'${product_info}',
+											'${use_yn}');
+	</insert>
+	
+	<update id="modifyProductInfo" parameterType="ProductVo">
+		UPDATE `hankil`.`product_info` SET `category_name`='${category_name}',
+											`product_name`='${product_name}',
+											`product_info`='${product_info}',
+											`use_yn`='${use_yn}'
+										WHERE `product_seq`='${product_seq}';
+	</update>
+</mapper>
